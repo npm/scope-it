@@ -1,4 +1,22 @@
 #!/usr/bin/env node
+var yargs = require('yargs')
+  .usage('$0 [options] [modules to scope]')
+  .option('scope', {
+    alias: 's',
+    describe: 'the scope name or an empty scope to remove the scopes from matching require statements',
+    required: true
+  })
+  .option('dry', {
+    default: true,
+    describe: 'set --dry 0 to save result'
+  })
+  .help('h')
+  .alias('h', 'help')
+  .version(require('../package.json').version)
+
+var argv = yargs.argv
+
+
 var cp = require('child_process')
 var fs = require('fs')
 var path = require('path')
@@ -7,14 +25,12 @@ var writeAtomic = require('write-file-atomic')
 
 var rewriteBin = path.join(path.dirname(require.resolve('rewrite-js')),'bin','rewrite-js')
 
-var scope = "@taco"
-var modules = ['a','b','c']
+var scope = argv.scope
+var modules = argv._
 var dir = path.resolve(process.cwd(),'./')
 
-var dryRun = true;
-
+var dryRun = argv.dry;
 var jsonPath = path.join(dir,'package.json');
-
 var pkg = require(jsonPath)
 
 if(dryRun) console.log("--- DRY RUN ---")
@@ -95,9 +111,4 @@ function spawn(a,cb){
   rs.pipe(proc.stdin)
 
 }
-
-
-
-
-
 
