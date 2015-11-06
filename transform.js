@@ -6,7 +6,7 @@ var moduleList = process.argv.slice(sep+1)
 
 var scope = moduleList.shift()
 
-if(!scope || (scope.indexOf('@') !== 0 || scope !== "")) {
+if(!scope || (scope.indexOf('@') !== 0 && scope !== "")) {
   throw "please pass your desired scope as the first argument after `--`. `-- @scope foomodule boomodule`"
 }
 
