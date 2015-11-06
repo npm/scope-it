@@ -1,0 +1,28 @@
+{
+  "name": "scope-it",
+  "version": "1.0.0",
+  "description": "migrate modules to a scope!",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "keywords": [
+    "scope",
+    "modules",
+    "private",
+    "cli",
+    "esprima",
+    "npmo"
+  ],
+  "author": "Ryan Day <soldair@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "end-of-stream": "^1.1.0",
+    "esprima": "^2.7.0",
+    "fs-write-stream-atomic": "^1.0.4",
+    "rewrite-js": "^1.0.4",
+    "split2": "^1.0.0",
+    "through2": "^2.0.0",
+    "walkdir": "0.0.10"
+  }
+}
