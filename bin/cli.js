@@ -31,7 +31,10 @@ if(!dryRun){
 var files = {}
 
 rewrite(function(){
-
+  if(dryRun) {
+    console.log('dryrun complete.')
+    process.exit(1)
+  }
 })
 
 function rewrite(cb){
@@ -47,16 +50,13 @@ function rewrite(cb){
 
   function work(){
     var w = todo.shift();
-    if(!w) cb() 
+    if(!w) return cb() 
     spawn(w,function(err){
       if(err) throw err;
-
+      work()
     })
   }
 
-  function done(){
-    if(!--started) cb()
-  }
 }
 
 function spawn(a,cb){
@@ -64,16 +64,20 @@ function spawn(a,cb){
   var args = ['transform.js','--',scope]
   args.push.apply(args,modules,{cwd:__dirname})
 
+  console.log('rewriting ',a[0])
   console.log('spawn',rewriteBin,args)
 
   var proc = cp.spawn(rewriteBin,args)
 
   var rs = fs.createReadStream(a[0])
 
+  var file = []
   proc.stdout.on('data',function(buf){
+    file.push(buf)
     console.log(buf+'')
   })
   proc.stdout.on('end',function(){
+    files[a[0]] = {file:a[0],stat:a[1],data:Buffer.concat(file)}
     cb()
   })
 
