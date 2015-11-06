@@ -77,8 +77,15 @@ function spawn(a,cb){
     console.log(buf+'')
   })
   proc.stdout.on('end',function(){
-    files[a[0]] = {file:a[0],stat:a[1],data:Buffer.concat(file)}
-    cb()
+    var buf = Buffer.concat(file);
+    //files[a[0]] = {file:a[0],stat:a[1],data:buf}
+
+    if(buf.length) {
+      console.log('saving ',a[0])
+      writeAtomic(a[0],buf,{mode:a[1].mode},function(err){
+        cb(err) 
+      })   
+    } else cb()
   })
 
   proc.stderr.on('data',function(buf){
