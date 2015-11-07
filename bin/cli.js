@@ -20,6 +20,10 @@ var yargs = require('yargs')
     default:process.cwd(),
     describe:"specify a module directory. defaults to your current working directory"
   })
+  .option('name',{
+    describe:"set this to 0 if you d not want to also update this module's scope",
+    default:true
+  })
   .help('h')
   .alias('h', 'help')
   .version(require('../package.json').version)
@@ -49,8 +53,15 @@ if(dryRun) ui.banner("     DRY RUN")
 // scope or unscope
 var origName = pkg.name
 pkg.name = (scope.length?scope+'/':'')+pkg.name.split('/').pop();
+// dependencies
+pkg.dependencies = updateDeps(scope,pkg.dependencies||{},modules)
+// devDependencies
+pkg.devDependencies = updateDeps(scope,pkg.devDependencies||{},modules)
 
-console.log('updating package.json from ',origName,'to',pkg.name)
+ui.banner('updating package.json name and deps')
+
+ui.hl(JSON.stringify(pkg,null,'  '),'json')
+
 if(!dryRun){
   writeAtomic(jsonPath,JSON.stringify(pkg,null,'  '))
 }
@@ -122,6 +133,18 @@ function spawn(a,cb){
 
 }
 
+function updateDeps(scope,deps,modules){
+  var out = {}
+  Object.keys(deps).forEach(function(_k){
+    var k = _k
+    if(~modules.indexOf(k)) k = (scope.length?scope+'/':'')+unscope(k)
+    out[k] = deps[_k]
+  })
+  return out
+}
 
+function unscope(name){
+  return name.split('/').pop()
+}
 
 
