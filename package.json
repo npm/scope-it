@@ -1,7 +1,7 @@
 {
   "name": "scope-it",
   "version": "1.0.0",
-  "description": "migrate modules to a scope!",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js"
@@ -14,13 +14,21 @@
     "esprima",
     "npmo"
   ],
-  "author": "Ryan Day <soldair@gmail.com>",
+  "author": "Ryan Day <ryan@npmjs.com>",
   "license": "ISC",
   "dependencies": {
     "esprima": "^2.7.0",
+    "hl": "^1.1.0",
     "rewrite-js": "^1.0.4",
     "walkdir": "0.0.10",
     "write-file-atomic": "^1.1.3",
     "yargs": "^3.29.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npm/scope-it.git"
+  },
+  "bin":{
+    "scope-it":"./bin/cli.js"
   }
 }

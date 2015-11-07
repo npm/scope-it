@@ -17,9 +17,13 @@ module.exports = {
 
 function scopeRequire(node){
   var value = unquote(node.source())
-  if(moduleList.indexOf(value) > -1) node.update("'"+scope+'/'+value+"'")
+  unscoped = unscope(value)
+  if(moduleList.indexOf(value) > -1) node.update("'"+(scope.length?scope+'/':'')+unscoped+"'")
 }
 
+function unscope(name){
+  return name.split('/').pop()
+}
 
 function unquote(name){
   return name.replace(/^['"]|['"]$/g,'')

@@ -10,6 +10,11 @@ var yargs = require('yargs')
     default: true,
     describe: 'set --dry 0 to save result'
   })
+  .option('colors',{
+    alias:"c",
+    default:true,
+    describe:""
+  })
   .help('h')
   .alias('h', 'help')
   .version(require('../package.json').version)
@@ -20,6 +25,7 @@ var argv = yargs.argv
 var cp = require('child_process')
 var fs = require('fs')
 var path = require('path')
+var ui = require('../ui')(argv.colors)
 var walkdir = require('walkdir')
 var writeAtomic = require('write-file-atomic')
 
@@ -33,7 +39,7 @@ var dryRun = argv.dry;
 var jsonPath = path.join(dir,'package.json');
 var pkg = require(jsonPath)
 
-if(dryRun) console.log("--- DRY RUN ---")
+if(dryRun) ui.banner("     DRY RUN")
 
 // scope or unscope
 var origName = pkg.name
@@ -48,8 +54,9 @@ var files = {}
 
 rewrite(function(){
   if(dryRun) {
-    console.log('dryrun complete.')
-    process.exit(1)
+    console.log('dryrun complete. --dry 0 to make these changes permanent\n')
+  } else {
+    console.log('changes have been saved.')
   }
 })
 
@@ -80,9 +87,6 @@ function spawn(a,cb){
   var args = ['transform.js','--',scope]
   args.push.apply(args,modules,{cwd:__dirname})
 
-  console.log('rewriting ',a[0])
-  console.log('spawn',rewriteBin,args)
-
   var proc = cp.spawn(rewriteBin,args)
 
   var rs = fs.createReadStream(a[0])
@@ -90,14 +94,15 @@ function spawn(a,cb){
   var file = []
   proc.stdout.on('data',function(buf){
     file.push(buf)
-    console.log(buf+'')
   })
   proc.stdout.on('end',function(){
     var buf = Buffer.concat(file);
-    //files[a[0]] = {file:a[0],stat:a[1],data:buf}
 
-    if(buf.length) {
-      console.log('saving ',a[0])
+    ui.banner(a[0])
+    ui.hl(buf)
+
+    if(buf.length && !dryRun) {
+      console.log('saving: ',a[0])
       writeAtomic(a[0],buf,{mode:a[1].mode},function(err){
         cb(err) 
       })   
@@ -111,4 +116,7 @@ function spawn(a,cb){
   rs.pipe(proc.stdin)
 
 }
+
+
+
 
