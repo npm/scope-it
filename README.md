@@ -20,5 +20,7 @@ adding `--dry 0` will update all the javascript file in the project!
 npm install -g scope-it
 ```
 
-
+## notes
+  
+You can use this tool to move from unscoped private modules to your oen scope and to move modules from one scope to another.
 
