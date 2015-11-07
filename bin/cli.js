@@ -13,7 +13,12 @@ var yargs = require('yargs')
   .option('colors',{
     alias:"c",
     default:true,
-    describe:""
+    describe:"if code output should not be highlighted set this to 0"
+  })
+  .option('dir',{
+    alias:"d",
+    default:process.cwd(),
+    describe:"specify a module directory. defaults to your current working directory"
   })
   .help('h')
   .alias('h', 'help')
@@ -33,10 +38,10 @@ var rewriteBin = path.join(path.dirname(require.resolve('rewrite-js')),'bin','re
 
 var scope = argv.scope
 var modules = argv._
-var dir = path.resolve(process.cwd(),'./')
+var dir = path.resolve(process.cwd(),argv.dir)
 
-var dryRun = argv.dry;
-var jsonPath = path.join(dir,'package.json');
+var dryRun = argv.dry
+var jsonPath = path.join(dir,'package.json')
 var pkg = require(jsonPath)
 
 if(dryRun) ui.banner("     DRY RUN")
