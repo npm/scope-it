@@ -42,5 +42,5 @@ Options:
 
 ## notes
   
-You can use this tool to move from unscoped private modules to your oen scope and to move modules from one scope to another.
+You can use this tool to move from unscoped private modules to your own org scope and to move modules from one scope to another.
 
