@@ -21,7 +21,7 @@ var yargs = require('yargs')
     describe:"specify a module directory. defaults to your current working directory"
   })
   .option('name',{
-    describe:"set this to 0 if you d not want to also update this module's scope",
+    describe:"set this to 0 if you do not want to also update this module's scope",
     default:true
   })
   .help('h')
@@ -44,6 +44,7 @@ var scope = argv.scope
 var modules = argv._
 var dir = path.resolve(process.cwd(),argv.dir)
 
+var scopeName = argv.name
 var dryRun = argv.dry
 var jsonPath = path.join(dir,'package.json')
 var pkg = require(jsonPath)
@@ -51,8 +52,9 @@ var pkg = require(jsonPath)
 if(dryRun) ui.banner("     DRY RUN")
 
 // scope or unscope
-var origName = pkg.name
-pkg.name = (scope.length?scope+'/':'')+pkg.name.split('/').pop();
+if (scopeName){
+  pkg.name = (scope.length?scope+'/':'')+pkg.name.split('/').pop();
+}
 // dependencies
 pkg.dependencies = updateDeps(scope,pkg.dependencies||{},modules)
 // devDependencies
