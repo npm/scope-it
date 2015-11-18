@@ -33,7 +33,7 @@ Options:
                                                                  [default: true]
   --dir, -d     specify a module directory. defaults to your current working
                 directory       [default: "/home/soldair/projects/npm/scope-it"]
-  --name        set this to 0 if you d not want to also update this module's
+  --name        set this to 0 if you do not want to also update this module's
                 scope                                            [default: true]
   -h, --help    Show help                                              [boolean]
   --version     Show version number                                    [boolean]
