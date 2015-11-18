@@ -62,7 +62,14 @@ if (argv.ignorePaths.length !== 0){
 var scopeName = argv.name
 var dryRun = argv.dry
 var jsonPath = path.join(dir,'package.json')
-var pkg = require(jsonPath)
+var pkg
+
+// make package.json optional
+if(!fs.existsSync(jsonPath)) {
+  pkg = {name:"package"}
+} else {
+  pkg = require(jsonPath)
+}
 
 if(dryRun) ui.banner("     DRY RUN")
 
@@ -122,19 +129,19 @@ function rewrite(cb){
 }
 
 function spawn(a,cb){
-
   var args = ['transform.js','--',scope]
-  args.push.apply(args,modules,{cwd:__dirname})
+  args.push.apply(args,modules,{cwd:path.resolve(__dirname,'..')})
 
   var proc = cp.spawn(rewriteBin,args)
 
-  var rs = fs.createReadStream(a[0])
 
   var file = []
-  proc.stdout.on('data',function(buf){
-    file.push(buf)
-  })
-  proc.stdout.on('end',function(){
+  // wait for stdout end and exit code.
+  var c = 2;
+  var finish = function(err){
+    if(err) throw err;
+    if(--c) return;
+
     var buf = Buffer.concat(file);
 
     ui.banner(a[0])
@@ -146,6 +153,22 @@ function spawn(a,cb){
         cb(err) 
       })   
     } else cb()
+  }
+
+  var rs = fs.createReadStream(a[0])
+
+  proc.on('exit',function(code){
+    var err
+    if(code) err = new Error('bad exit code transforming js: '+code)
+    finish(err)
+  })
+
+  proc.stdout.on('data',function(buf){
+    file.push(buf)
+  })
+
+  proc.stdout.on('end',function(){
+    finish()
   })
 
   proc.stderr.on('data',function(buf){
