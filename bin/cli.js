@@ -24,6 +24,10 @@ var yargs = require('yargs')
     describe:"set this to 0 if you d not want to also update this module's scope",
     default:true
   })
+  .option('ignorePaths', {
+    describe: "specify a comma separated list of paths within [dir] to ignore",
+    default:""
+  })
   .help('h')
   .alias('h', 'help')
   .version(require('../package.json').version)
@@ -43,6 +47,20 @@ var rewriteBin = path.join(path.dirname(require.resolve('rewrite-js')),'bin','re
 var scope = argv.scope
 var modules = argv._
 var dir = path.resolve(process.cwd(),argv.dir)
+
+var ignorePaths = [];
+if (argv.ignorePaths.length !== 0){
+  ignorePaths = argv.ignorePaths.split(",");
+  for (var i = 0; i < ignorePaths.length; i++){
+    if (ignorePaths[i].length){
+      if (ignorePaths[i].charAt(0) !== '/'){
+        ignorePaths[i] = dir + '/' + ignorePaths[i];
+      }else{
+        ignorePaths[i] = dir + ignorePaths[i];
+      }
+    }
+  }
+}
 
 var dryRun = argv.dry
 var jsonPath = path.join(dir,'package.json')
@@ -81,6 +99,11 @@ function rewrite(cb){
   walkdir(dir,function(p,stat){
     if(p.substr(p.length-3) !== '.js') return
     if(~p.indexOf('.git') || ~p.indexOf('node_modules')) return
+    for (var i = 0; i < ignorePaths.length; i++){
+      if (p.indexOf(ignorePaths[i]) === 0){
+        return;
+      }
+    }
     if(!stat.isFile()) return
     todo.push([p,stat])
   }).on('end',function(){
