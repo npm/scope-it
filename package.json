@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "esprima": "^2.7.0",
-    "hl": "^1.1.0",
+    "hl": "^1.2.0",
     "rewrite-js": "^1.0.4",
     "walkdir": "0.0.10",
     "write-file-atomic": "^1.1.3",

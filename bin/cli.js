@@ -53,11 +53,8 @@ if (argv.ignorePaths.length !== 0){
   ignorePaths = argv.ignorePaths.split(",");
   for (var i = 0; i < ignorePaths.length; i++){
     if (ignorePaths[i].length){
-      if (ignorePaths[i].charAt(0) !== '/'){
-        ignorePaths[i] = dir + '/' + ignorePaths[i];
-      }else{
-        ignorePaths[i] = dir + ignorePaths[i];
-      }
+      // path.join removes extra "/" between paths it's joining
+      ignorePaths[i] = path.join(dir, ignorePaths[i])
     }
   }
 }
@@ -99,6 +96,7 @@ function rewrite(cb){
   walkdir(dir,function(p,stat){
     if(p.substr(p.length-3) !== '.js') return
     if(~p.indexOf('.git') || ~p.indexOf('node_modules')) return
+
     for (var i = 0; i < ignorePaths.length; i++){
       if (p.indexOf(ignorePaths[i]) === 0){
         return;
