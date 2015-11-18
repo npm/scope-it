@@ -78,7 +78,7 @@ ui.banner('updating package.json name and deps')
 ui.hl(JSON.stringify(pkg,null,'  '),'json')
 
 if(!dryRun){
-  writeAtomic(jsonPath,JSON.stringify(pkg,null,'  '))
+  writeAtomic(jsonPath,JSON.stringify(pkg,null,'  '), function(err){if (err){throw err;}});
 }
 
 var files = {}
