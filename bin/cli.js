@@ -130,9 +130,9 @@ function rewrite(cb){
 
 function spawn(a,cb){
   var args = ['transform.js','--',scope]
-  args.push.apply(args,modules,{cwd:path.resolve(__dirname,'..')})
+  args.push.apply(args,modules)
 
-  var proc = cp.spawn(rewriteBin,args)
+  var proc = cp.spawn(rewriteBin,args,{cwd:path.resolve(__dirname,'..')})
 
 
   var file = []
