@@ -87,7 +87,7 @@ ui.banner('updating package.json name and deps')
 ui.hl(JSON.stringify(pkg,null,'  '),'json')
 
 if(!dryRun){
-  writeAtomic(jsonPath,JSON.stringify(pkg,null,'  '), function(err){if (err){throw err;}});
+  writeAtomic(jsonPath,JSON.stringify(pkg,null,'  ')+'\n', function(err){if (err){throw err;}});
 }
 
 var files = {}
@@ -119,7 +119,7 @@ function rewrite(cb){
 
   function work(){
     var w = todo.shift();
-    if(!w) return cb() 
+    if(!w) return cb()
     spawn(w,function(err){
       if(err) throw err;
       work()
@@ -150,8 +150,8 @@ function spawn(a,cb){
     if(buf.length && !dryRun) {
       console.log('saving: ',a[0])
       writeAtomic(a[0],buf,{mode:a[1].mode},function(err){
-        cb(err) 
-      })   
+        cb(err)
+      })
     } else cb()
   }
 
@@ -192,5 +192,3 @@ function updateDeps(scope,deps,modules){
 function unscope(name){
   return name.split('/').pop()
 }
-
-
