@@ -1,5 +1,5 @@
 
-var sep = process.argv.indexOf('--') 
+var sep = process.argv.indexOf('--')
 if(sep === -1) throw "pass argument -- to separate module names from rewrite-js arguments"
 
 var moduleList = process.argv.slice(sep+1)
@@ -18,11 +18,16 @@ module.exports = {
 function scopeRequire(node){
   var value = unquote(node.source())
   unscoped = unscope(value)
-  if(moduleList.indexOf(value) > -1) node.update("'"+(scope.length?scope+'/':'')+unscoped+"'")
+  moduleName = unscoped.split('/')[0]
+  if(moduleList.indexOf(moduleName) > -1) node.update("'"+(scope.length?scope+'/':'')+unscoped+"'")
 }
 
 function unscope(name){
-  return name.split('/').pop()
+  var value = name.split('/')
+  if(value[0].indexOf('@') === 0) {
+    value.shift();
+  }
+  return value.join('/')
 }
 
 function unquote(name){
