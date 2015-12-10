@@ -32,6 +32,9 @@
     "scope-it": "./bin/cli.js"
   },
   "devDependencies": {
+    "cpr": "^1.0.0",
+    "monotonic-timestamp": "0.0.9",
+    "rimraf": "^2.4.4",
     "tape": "^4.2.2"
   }
 }
