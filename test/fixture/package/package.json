@@ -1,0 +1,17 @@
+{
+  "name": "@test/package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "../../node_modules/.bin/tape test/*.js"
+  },
+  "dependencies":{
+    "@test/a":"~1.0.0",
+    "b":"~1.0.0",
+    "@soldair/c":"~1.0.0",
+    "d":"~1.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
