@@ -190,5 +190,9 @@ function updateDeps(scope,deps,modules){
 }
 
 function unscope(name){
-  return name.split('/').pop()
+  var value = name.split('/')
+  if(value[0].indexOf('@') === 0) {
+    value.shift();
+  }
+  return value.join('/')
 }
