@@ -183,7 +183,8 @@ function updateDeps(scope,deps,modules){
   var out = {}
   Object.keys(deps).forEach(function(_k){
     var k = _k
-    if(~modules.indexOf(k)) k = (scope.length?scope+'/':'')+unscope(k)
+    unscoped = unscope(k)
+    if(~modules.indexOf(unscoped)) k = (scope.length?scope+'/':'')+unscoped
     out[k] = deps[_k]
   })
   return out

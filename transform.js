@@ -18,8 +18,8 @@ module.exports = {
 function scopeRequire(node){
   var value = unquote(node.source())
   unscoped = unscope(value)
-  curscope = value.split('/')[0]
-  if(moduleList.indexOf(curscope) > -1) node.update("'"+(scope.length?scope+'/':'')+unscoped+"'")
+  moduleName = unscoped.split('/')[0]
+  if(moduleList.indexOf(moduleName) > -1) node.update("'"+(scope.length?scope+'/':'')+unscoped+"'")
 }
 
 function unscope(name){
