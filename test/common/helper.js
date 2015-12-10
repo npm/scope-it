@@ -7,15 +7,18 @@ var ts = require('monotonic-timestamp')
 
 module.exports = {
   makeTest:function(cb){
-    var from  = path.resolve(__dirname,'..','fixtures','package')
-    var dest = path.resolve(__dirname,'..',ts())
-    cpr(from,dest,function(){
+    var from  = path.resolve(__dirname,'..','fixture','package')
+    var dest = path.resolve(__dirname,'..',ts()+'')
+
+    console.log(from,dest)
+
+    cpr(from,dest,function(err){
       if(err) return cb(err)
       cb(false,dest)
     })
   },
-  scopeIt:function(args,cb){
-    var proc = spawn(path.resolve(__dirname,'..','bin','cli.js'),args)
+  scopeIt:function(dest,args,cb){
+    var proc = spawn(path.resolve(__dirname,'..','..','bin','cli.js'),args,{cwd:dest})
 
     var out = []
     var err = []

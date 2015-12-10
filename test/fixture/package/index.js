@@ -7,4 +7,4 @@ require('b')
 
 require('@soldair/c/lib/index.js')
 
-require('d/test')
+require('@taco/d/test')
