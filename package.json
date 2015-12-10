@@ -30,5 +30,8 @@
   },
   "bin": {
     "scope-it": "./bin/cli.js"
+  },
+  "devDependencies": {
+    "tape": "^4.2.2"
   }
 }

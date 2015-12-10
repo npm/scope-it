@@ -1,0 +1,10 @@
+
+
+
+require('@test/a')
+
+require('b')
+
+require('@soldair/c/lib/index.js')
+
+require('d/test')
