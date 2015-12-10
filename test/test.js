@@ -14,7 +14,7 @@ test('can',function(t){
 
     clean.push(dest)
 
-    helper.scopeIt(dest,['--dry', '0', '-s','@taco', '@test/a', '@soldair/c','d'],function(err,data){
+    helper.scopeIt(dest,['--dry', '0', '-s','@taco', 'a', 'c','d'],function(err,data){
       t.ok(!err,'should not have error running command')
       t.ok(data,'should have data')
 
@@ -22,9 +22,19 @@ test('can',function(t){
       var index = fs.readFileSync(path.join(dest,'index.js'))
 
 
-      console.log(json+'')
+      var obj = JSON.parse(json+'')
 
-      console.log(index+'')
+      var deps = obj.dependencies
+      t.ok(deps['@taco/a'],'should have @taco/a')
+      t.ok(deps.b,'should have not changed b')
+      t.ok(deps['@taco/c'],'should have @taco/c')
+      t.ok(deps['@taco/d'],'should have @taco/d')
+      
+      index = index+''
+
+      t.ok(~index.indexOf('@taco/c/lib/index.js'),'require @soldair/c/lib/index.js -> @taco/c/lib/index.js')
+      t.ok(~index.indexOf('@taco/d/test'),'require d/test -> @taco/d/test')
+      t.ok(~index.indexOf('@taco/a'),'require @test/a -> @taco/a')
 
       t.end()
       clean()
