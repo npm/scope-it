@@ -8,7 +8,7 @@ var ts = require('monotonic-timestamp')
 module.exports = {
   makeTest:function(cb){
     var from  = path.resolve(__dirname,'..','fixture','package')
-    var dest = path.resolve(__dirname,'..',ts()+'')
+    var dest = path.resolve(__dirname,'..','run-'+ts())
 
     console.log(from,dest)
 
@@ -46,7 +46,7 @@ module.exports = {
         try {
           rimraf.sync(files.shift())
         } catch(e) {
-          if(files.length === start) throw e    
+          if(files.length === start) throw e
         }
       }
       if (err) process.emit('error', err)
